@@ -1,3 +1,4 @@
+import 'package:do_an/ui/widgets/CarouselSlider.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,31 +10,36 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-          child: TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                contentPadding: const EdgeInsets.all(8),
-                hintText: "Search",
-                filled: true,
-                fillColor: Colors.grey[100],
-                enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 1, color: Colors.white),
-                    borderRadius: BorderRadius.circular(20)),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 1, color: Colors.black),
-                    borderRadius: BorderRadius.circular(10))),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  contentPadding: const EdgeInsets.all(8),
+                  hintText: "Search",
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 1, color: Colors.white),
+                      borderRadius: BorderRadius.circular(20)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(10))),
+            ),
           ),
-        ),
-      ],
+          Carousel(),
+        ],
+      ),
     );
   }
 }
