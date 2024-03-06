@@ -18,7 +18,7 @@ class _CarouselState extends State<Carousel> {
         children: [
           CarouselSlider(
             options: CarouselOptions(
-              height: 300,
+              height: 200,
               aspectRatio: 16 / 9,
               viewportFraction: 1,
               initialPage: 0,
@@ -50,6 +50,9 @@ class _CarouselState extends State<Carousel> {
                 },
               );
             }).toList(),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,

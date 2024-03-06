@@ -1,5 +1,5 @@
-import 'package:do_an/ui/pages/CartPage.dart';
-import 'package:do_an/ui/pages/HomePage.dart';
+import 'package:do_an/ui/screen/cart/CartPage.dart';
+import 'package:do_an/ui/screen/home/HomePage.dart';
 import 'package:do_an/ui/widgets/layout.dart';
 import 'package:flutter/material.dart';
 

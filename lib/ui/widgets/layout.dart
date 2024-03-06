@@ -1,5 +1,4 @@
 import 'package:do_an/ui/widgets/ButtonNavBar.dart';
-import 'package:do_an/ui/widgets/AppBar.dart';
 import 'package:flutter/material.dart';
 
 class MainLayout extends StatelessWidget {
@@ -27,7 +26,7 @@ class MainLayout extends StatelessWidget {
               margin: const EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[50]),
+                  color: Colors.grey[100]),
               child: IconButton(
                   icon: const Icon(Icons.notifications), onPressed: () {})),
           Container(
@@ -42,12 +41,19 @@ class MainLayout extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: CustomButtonsNavigationBar(current: index),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: widget,
-        ),
-      ),
+      body: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: widget,
+              ),
+            ),
+          );
+        },
+      )),
     );
   }
 }
