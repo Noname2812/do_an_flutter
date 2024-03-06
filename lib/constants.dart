@@ -11,3 +11,4 @@ List<ItemButtonNavBar> itemsBottomNavigationBav = [
         Icons.card_giftcard,
       )),
 ];
+const BASE_URL = "do-an-web-be-git-main-top1808s-projects.vercel.app";

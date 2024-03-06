@@ -36,7 +36,8 @@ class CartProduct extends StatelessWidget {
                   color: AppColor.primaryColor.withOpacity(0.2),
                 ),
                 child: Image.memory(
-                  const Base64Decoder().convert(product.image.split(',').last),
+                  const Base64Decoder()
+                      .convert(product.images[0].split(',').last),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -119,14 +120,18 @@ class CardCategory extends StatelessWidget {
         const SizedBox(
           height: 4,
         ),
-        Text(
-          category.title,
-          style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-              fontSize: 12,
-              color: AppColor.primaryColor,
-              letterSpacing: 0.4),
-          maxLines: 2,
+        Container(
+          width: 80,
+          child: Text(
+            category.title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                overflow: TextOverflow.ellipsis,
+                fontSize: 12,
+                color: AppColor.primaryColor,
+                letterSpacing: 0.4),
+            maxLines: 2,
+          ),
         ),
       ],
     );

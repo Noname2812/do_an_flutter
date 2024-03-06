@@ -37,6 +37,7 @@ dependencies:
   http: ^1.2.1
   flutter_redux: ^0.10.0
   carousel_slider: ^4.2.1
+  flutter_widget_from_html: ^0.14.11
 
 dev_dependencies:
   flutter_test:
