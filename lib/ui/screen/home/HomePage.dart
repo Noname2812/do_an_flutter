@@ -1,6 +1,6 @@
 import 'package:do_an/modals/Category.dart';
 import 'package:do_an/modals/Product.dart';
-import 'package:do_an/api/index.dart';
+import 'package:do_an/api/productApi.dart';
 import 'package:do_an/ui/widgets/CarouselSlider.dart';
 import 'package:do_an/ui/widgets/SliderItem.dart';
 import 'package:flutter/material.dart';
@@ -40,37 +40,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-          child: TextFormField(
-            onSaved: (value) {
-              showDialog(
-                  context: context,
-                  builder: (context) => Dialog.fullscreen(
-                        child: Text(value!),
-                      ));
-            },
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  borderSide: BorderSide.none),
-              disabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              prefixIcon: const Icon(Icons.search),
-              fillColor: Colors.grey.shade200,
-              filled: true,
-              hintText: "Search",
-            ),
-          ),
+        const Carousel(
+          list: [],
+          isAutoPlay: true,
+          height: 200,
         ),
-        const Carousel(),
         SliderItem(
           title: "Categories",
           categories: categories,

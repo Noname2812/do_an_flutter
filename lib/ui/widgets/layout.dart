@@ -1,3 +1,4 @@
+import 'package:do_an/ui/screen/product/ListProduct.dart';
 import 'package:do_an/ui/widgets/ButtonNavBar.dart';
 import 'package:flutter/material.dart';
 
@@ -9,36 +10,9 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50), color: Colors.grey[100]),
-          child: ClipOval(
-            child: SizedBox.fromSize(
-              size: const Size.fromRadius(48), // Image radius
-              child: Image.asset('assets/icons/winxd.png', fit: BoxFit.cover),
-            ),
-          ),
-        ),
+        toolbarHeight: 50,
         automaticallyImplyLeading: false,
-        actions: [
-          Container(
-              padding: const EdgeInsets.all(2),
-              margin: const EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[100]),
-              child: IconButton(
-                  icon: const Icon(Icons.notifications), onPressed: () {})),
-          Container(
-            padding: const EdgeInsets.all(2),
-            margin: const EdgeInsets.only(right: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.grey[50]),
-            child: IconButton(
-                icon: const Icon(Icons.account_circle), onPressed: () {}),
-          ),
-        ],
+        title: const SearchBarApp(),
       ),
       bottomNavigationBar: CustomButtonsNavigationBar(current: index),
       body: SafeArea(child: LayoutBuilder(
@@ -54,6 +28,45 @@ class MainLayout extends StatelessWidget {
           );
         },
       )),
+    );
+  }
+}
+
+class SearchBarApp extends StatelessWidget {
+  const SearchBarApp({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+      child: TextFormField(
+        onFieldSubmitted: (value) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ListProduct(
+                        param: "/search/$value",
+                      )));
+        },
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+              borderSide: BorderSide.none),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          prefixIcon: const Icon(Icons.search),
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          hintText: "Search",
+        ),
+      ),
     );
   }
 }

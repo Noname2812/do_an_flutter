@@ -1,7 +1,7 @@
 class Product {
   String name, id;
   int minprice, maxPrice;
-  List<String> images;
+  List<dynamic> images;
   Product(
       {required this.images,
       required this.name,
@@ -28,13 +28,16 @@ class DetailProduct extends Product {
       this.categoryID,
       this.description,
       this.groupOptions,
+      this.productSKUList,
       this.productSKUBarcodes});
   DetailProduct.constructor()
       : super(images: [], name: '', minprice: 0, id: '', maxPrice: 0);
   String? description;
-  String? categoryID;
-  List<GroupOptions>? groupOptions;
-  List<String>? productSKUBarcodes;
+  List<dynamic>? categoryID;
+  List<dynamic>? groupOptions;
+  List<dynamic>? productSKUBarcodes;
+  List<dynamic>? productSKUList;
+
   factory DetailProduct.fromJson(Map<String, dynamic> data) {
     return DetailProduct(
       id: data["_id"],
@@ -46,6 +49,7 @@ class DetailProduct extends Product {
       groupOptions: data["groupOptions"],
       name: data["name"],
       productSKUBarcodes: data["productSKUBarcodes"],
+      productSKUList: data['productSKUList'],
     );
   }
 }
@@ -56,4 +60,8 @@ class GroupOptions {
   String id;
   GroupOptions(
       {required this.groupName, required this.id, required this.options});
+  factory GroupOptions.fromJson(Map<String, dynamic> json) {
+    return GroupOptions(
+        groupName: json['groupName'], id: json['id'], options: json['options']);
+  }
 }

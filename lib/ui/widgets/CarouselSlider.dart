@@ -1,9 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:do_an/functionHelpers.dart';
 import 'package:flutter/material.dart';
 
 class Carousel extends StatefulWidget {
-  const Carousel({super.key});
-
+  const Carousel(
+      {super.key,
+      required this.list,
+      required this.isAutoPlay,
+      this.bgColor,
+      required this.height});
+  final List<dynamic> list;
+  final bool isAutoPlay;
+  final Color? bgColor;
+  final double height;
   @override
   State<Carousel> createState() => _CarouselState();
 }
@@ -13,18 +22,19 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      color: widget.bgColor ?? Colors.white,
       child: Column(
         children: [
           CarouselSlider(
             options: CarouselOptions(
-              height: 200,
+              height: widget.height,
               aspectRatio: 16 / 9,
               viewportFraction: 1,
               initialPage: 0,
               enableInfiniteScroll: true,
               reverse: false,
-              autoPlay: false,
+              autoPlay: widget.isAutoPlay,
               autoPlayInterval: const Duration(seconds: 3),
               autoPlayAnimationDuration: const Duration(milliseconds: 800),
               autoPlayCurve: Curves.fastOutSlowIn,
@@ -37,16 +47,14 @@ class _CarouselState extends State<Carousel> {
                 });
               },
             ),
-            items: [1, 2, 3, 4, 5].map((i) {
+            items: widget.list.map((i) {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(color: Colors.amber),
-                      child: Text(
-                        'text $i',
-                        style: const TextStyle(fontSize: 16.0),
-                      ));
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: base64ToImageObject(i), fit: BoxFit.cover)),
+                  );
                 },
               );
             }).toList(),
@@ -56,7 +64,7 @@ class _CarouselState extends State<Carousel> {
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: indicators(5, currentIndex)),
+              children: indicators(widget.list.length, currentIndex)),
         ],
       ),
     );

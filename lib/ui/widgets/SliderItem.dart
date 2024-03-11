@@ -1,5 +1,6 @@
 import 'package:do_an/modals/Category.dart';
 import 'package:do_an/modals/Product.dart';
+import 'package:do_an/ui/screen/product/ListProduct.dart';
 import 'package:do_an/ui/widgets/CartItem.dart';
 import 'package:do_an/ui/widgets/Loading.dart';
 import 'package:flutter/material.dart';
@@ -34,12 +35,14 @@ class SliderItem extends StatelessWidget {
               ),
             ),
             SeeAllWidget(
-              route: type == 1 ? "/categories" : "/products",
+              route: type == 2 ? "/" : "/",
             ),
           ],
         ),
         isLoading
-            ? Loading()
+            ? const Loading(
+                isFullScreen: false,
+              )
             : (type == 1
                 ? ShowListItem(
                     categories: categories,
@@ -83,7 +86,10 @@ class SeeAllWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, route),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ListProduct(param: "/"))),
         child: const Text(
           "See all",
           style: TextStyle(fontSize: 15, color: Colors.blue),

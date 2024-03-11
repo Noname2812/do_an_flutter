@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Category.dart';
 import 'package:do_an/modals/Product.dart';
+import 'package:do_an/ui/screen/product/DetailProduct.dart';
+import 'package:do_an/ui/screen/product/ListProduct.dart';
 import 'package:do_an/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +27,14 @@ class CartProduct extends StatelessWidget {
         child: Column(
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailProductPage(
+                              id: product.id,
+                            )));
+              },
               child: Container(
                 height: 150,
                 width: double.infinity,
@@ -35,11 +45,7 @@ class CartProduct extends StatelessWidget {
                       topRight: Radius.circular(8)),
                   color: AppColor.primaryColor.withOpacity(0.2),
                 ),
-                child: Image.memory(
-                  const Base64Decoder()
-                      .convert(product.images[0].split(',').last),
-                  fit: BoxFit.fill,
-                ),
+                child: base64ToImage(product.images[0]),
               ),
             ),
             Padding(
@@ -102,7 +108,12 @@ class CardCategory extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onTap: () {},
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ListProduct(
+                        param: "/get-by-category/${category.id}",
+                      ))),
           child: Container(
               height: 60,
               width: 60,
