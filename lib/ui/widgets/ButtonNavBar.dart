@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CustomButtonsNavigationBar extends StatelessWidget {
   CustomButtonsNavigationBar({super.key, required this.current});
   final int current;
-  List<String> routes = ['/', '/cart'];
+  List<String> routes = ['/', '/notifications', "/cart", "/user"];
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
