@@ -1,6 +1,7 @@
 import 'package:do_an/modals/index.dart';
 import 'package:flutter/material.dart';
 
+const infoList = [];
 const List<Map<String, String>> ORDER_STATUS = [
   {
     "label": 'Tất cả',

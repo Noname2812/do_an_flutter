@@ -66,42 +66,38 @@ class _DetailProductState extends State<DetailProductPage> {
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: InkWell(
                           onTap: () {
-                            e.type == 1
-                                ? {
-                                    if (userID == null)
-                                      {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                                  title: const Text(
-                                                      "Are you going to login now ?"),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator
-                                                              .pushReplacementNamed(
-                                                                  context,
-                                                                  "/user");
-                                                        },
-                                                        child:
-                                                            const Text("Yes")),
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: const Text("No"))
-                                                  ],
-                                                ))
-                                      }
-                                    else
+                            if (userID == null) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title: const Text(
+                                            "Are you going to login now ?"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("No")),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pushReplacementNamed(
+                                                    context, "/user");
+                                              },
+                                              child: const Text("Yes")),
+                                        ],
+                                      ));
+                            } else {
+                              e.type == 1
+                                  ? {
                                       {
                                         handleOntapBottomButton(
                                             context, product, 1)
                                       }
-                                  }
-                                : handleOntapBottomButton(context, product, 2);
+                                    }
+                                  : handleOntapBottomButton(
+                                      context, product, 2);
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 2),

@@ -139,12 +139,14 @@ class ParamPayment {
   String customerName,
       customerPhone,
       customerEmail,
+      totalProductPrice,
       paymentMethod,
       deliveryAddress;
   String? deliveryFee;
   List<ItemCart> products;
   ParamPayment(
       {required this.userID,
+      required this.totalProductPrice,
       required this.products,
       required this.customerName,
       required this.customerPhone,
@@ -156,7 +158,7 @@ class ParamPayment {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'deliveryFee': deliveryFee ?? "0",
-      "totalProductPrice": "0",
+      "totalProductPrice": totalProductPrice,
       'customerName': customerName,
       'customerPhone': customerPhone,
       'customerEmail': customerEmail,

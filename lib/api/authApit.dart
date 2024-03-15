@@ -1,7 +1,59 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:do_an/api/requestGet.dart';
-import 'package:do_an/modals/Order.dart';
+
 import 'package:http/http.dart' as http;
+
+import 'package:do_an/api/requestGet.dart';
+
+class ParamChangeInfo {
+  String? name, password, address, image, phoneNumber, newPassword, email;
+  ParamChangeInfo({
+    this.email,
+    this.name,
+    this.password,
+    this.address,
+    this.image,
+    this.phoneNumber,
+    this.newPassword,
+  });
+
+  Map<String, String> toMapPhone() {
+    return <String, String>{
+      'phoneNumber': phoneNumber!,
+    };
+  }
+
+  Map<String, String> toMapEmail() {
+    return <String, String>{
+      'email': email!,
+    };
+  }
+
+  Map<String, String> toMapName() {
+    return <String, String>{
+      'name': name!,
+    };
+  }
+
+  Map<String, String> toMapPassword() {
+    return <String, String>{
+      'password': password!,
+      'newPassword': newPassword!,
+    };
+  }
+
+  Map<String, String> toMapAddress() {
+    return <String, String>{
+      'address': address!,
+    };
+  }
+
+  Map<String, String> toMapImage() {
+    return <String, String>{
+      'image': image!,
+    };
+  }
+}
 
 Future<Map<String, dynamic>> login(
     String email, String password, String param) async {
@@ -30,6 +82,16 @@ Future<http.Response> resigter(
   );
   final res =
       await http.post(url, body: {"email": email, "password": password});
+  return res;
+}
+
+Future<http.Response> changeInfo(
+    Map<String, String> param, String userID, int type) async {
+  final url = Uri.http(
+    BASE_URL_LOCAL,
+    '/v2/auth/${type == 1 ? "change-password" : "change-infor"}',
+  );
+  final res = await http.post(url, body: param, headers: {"userId": userID});
   return res;
 }
 

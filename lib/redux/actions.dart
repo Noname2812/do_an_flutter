@@ -39,6 +39,11 @@ class AddToCart {
   AddToCart({required this.item});
 }
 
+class ChangeInfo {
+  User user;
+  ChangeInfo({required this.user});
+}
+
 class GetOrderSuccess {
   List<Order> orders;
   GetOrderSuccess({required this.orders});

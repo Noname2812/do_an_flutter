@@ -1,15 +1,16 @@
 import 'package:do_an/api/cartApi.dart';
+import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
 import 'package:do_an/redux/actions.dart';
 import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/widgets/Loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key, this.item});
+  const CheckoutPage({super.key, this.item, required this.type});
   final ItemCart? item;
+  final int type;
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
 }
@@ -31,18 +32,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    print({"item": widget.item});
     final store = StoreProvider.of<AppState>(context);
-
+    nameController.text = store.state.user.name ?? '';
+    addressController.text = store.state.user.address ?? '';
+    phoneController.text = store.state.user.phoneNumber ?? '';
+    emailController.text = store.state.user.email ?? '';
     void handlePayment() async {
-      store.dispatch(StateLoading(isLoading: true));
       ParamPayment p = ParamPayment(
           userID: store.state.user.id!,
-          products: widget.item != null
-              ? List.filled(1, widget.item!)
-              : store.state.cart,
+          products: widget.type == 1 ? store.state.cart : [widget.item!],
+          totalProductPrice: widget.type == 1
+              ? caculatorCart(store.state.cart).toString()
+              : widget.item!.totalPrice.toString(),
           customerName: nameController.text,
           customerPhone: phoneController.text,
           customerEmail: emailController.text,
+          deliveryFee: '0',
           paymentMethod: "cash",
           deliveryAddress: "deliveryAddress");
       final res = await payment(p);
@@ -60,7 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         onPressed: () => Navigator.pushNamed(context, "/"),
                         child: const Text("OK"))
                   ],
-                ));
+                )).then((value) => Navigator.pushNamed(context, "/"));
       }
     }
 
@@ -81,63 +87,73 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Column(
                   children: [
                     Form(
+                        key: _formKey,
                         child: Column(
-                      children: [
-                        const Text(
-                          "Vui lòng nhập thông tin nhận hàng",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        TextFormField(
-                          textInputAction: TextInputAction.next,
-                          controller: nameController,
-                          decoration: const InputDecoration(
-                            labelText: "Tên khách hàng",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a value';
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: addressController,
-                          decoration: const InputDecoration(
-                              labelText: "Địa chỉ nhận hàng"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a value';
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: phoneController,
-                          decoration: const InputDecoration(labelText: "SĐT"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a value';
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(labelText: "EMail"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a value';
-                            }
-                            return null;
-                          },
-                        ),
-                        ElevatedButton(
-                          onPressed: () => handlePayment(),
-                          child: const Text('Submit'),
-                        ),
-                      ],
-                    ))
+                          children: [
+                            const Text(
+                              "Thông tin nhận hàng",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: nameController,
+                              decoration: const InputDecoration(
+                                labelText: "Tên khách hàng",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a value';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                  labelText: "Địa chỉ nhận hàng"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a value';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: phoneController,
+                              decoration:
+                                  const InputDecoration(labelText: "SĐT"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a value';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: emailController,
+                              decoration:
+                                  const InputDecoration(labelText: "EMail"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a value';
+                                }
+                                return null;
+                              },
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                bool? isValid =
+                                    _formKey.currentState?.validate();
+                                if (isValid!) {
+                                  store.dispatch(StateLoading(isLoading: true));
+                                  handlePayment();
+                                }
+                              },
+                              child: const Text('Submit'),
+                            ),
+                          ],
+                        ))
                   ],
                 ),
               ),
