@@ -296,15 +296,43 @@ class _ModalBottomSheetOpenState extends State<ModalBottomSheetOpen> {
                 child: TextButton(
                   onPressed: widget.type == 1
                       ? () => handleAddToCart()
-                      : () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckoutPage(
-                                    item: ItemCart(
-                                        quantity: quantity,
-                                        product: widget.product,
-                                        price: int.parse(price)),
-                                  ))),
+                      : () {
+                          if (productSKU.toList().length != 2) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(
+                                                context); // Close the dialog
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                      content: const Text(
+                                        textAlign: TextAlign.center,
+                                        "Vui lòng chọn đầy đủ các option !",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ));
+                          } else {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CheckoutPage(
+                                          type: 2,
+                                          item: ItemCart(
+                                              totalPrice:
+                                                  quantity * int.parse(price),
+                                              customerId: userID,
+                                              quantity: quantity,
+                                              productSKUBarcode: barcode,
+                                              product: widget.product,
+                                              price: int.parse(price)),
+                                        )));
+                          }
+                        },
                   child: Text(
                     widget.nameButton,
                     style: const TextStyle(

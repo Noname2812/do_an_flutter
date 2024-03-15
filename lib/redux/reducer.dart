@@ -33,5 +33,8 @@ AppState reducerAppState(AppState state, dynamic action) {
     temp.add(action.item);
     return state.coppyWith(cart: temp);
   }
+  if (action is ChangeInfo) {
+    return state.coppyWith(user: action.user);
+  }
   return state;
 }

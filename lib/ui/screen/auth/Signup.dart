@@ -112,7 +112,17 @@ class _SignupPageState extends State<SignupPage> {
                                 children: [
                                   TextFormField(
                                     controller: _emailController,
-                                    validator: (value) {},
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter an email address.';
+                                      } else if (!RegExp(
+                                              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$")
+                                          .hasMatch(value)) {
+                                        return 'Please enter a valid email address.';
+                                      } else {
+                                        return null; // No error
+                                      }
+                                    },
                                     style: GoogleFonts.nunitoSans(),
                                     textInputAction: TextInputAction.next,
                                     keyboardType: TextInputType.emailAddress,
@@ -141,7 +151,15 @@ class _SignupPageState extends State<SignupPage> {
                                     textInputAction: TextInputAction.next,
                                     keyboardType: TextInputType.visiblePassword,
                                     obscureText: true,
-                                    validator: (value) {},
+                                    validator: (value) {
+                                      if (value!.length < 6) {
+                                        return 'Value must be at least 6 characters.';
+                                      } else if (value.contains(' ')) {
+                                        return 'Value cannot contain spaces.';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                     decoration: InputDecoration(
                                         contentPadding:
                                             const EdgeInsets.symmetric(
@@ -166,7 +184,14 @@ class _SignupPageState extends State<SignupPage> {
                                     style: GoogleFonts.nunitoSans(),
                                     textInputAction: TextInputAction.next,
                                     keyboardType: TextInputType.visiblePassword,
-                                    validator: (value) {},
+                                    validator: (value) {
+                                      // ignore: unrelated_type_equality_checks
+                                      if (value!.length !=
+                                          _passwordController.text) {
+                                        return 'Value must equal password !';
+                                      }
+                                      return null;
+                                    },
                                     obscureText: true,
                                     decoration: InputDecoration(
                                         contentPadding:
