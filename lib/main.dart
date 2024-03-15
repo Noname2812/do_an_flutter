@@ -6,6 +6,7 @@ import 'package:do_an/ui/screen/home/HomePage.dart';
 import 'package:do_an/ui/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:redux/redux.dart';
 
@@ -34,10 +35,7 @@ class MyApp extends StatelessWidget {
                 widget: HomePage(),
                 index: 0,
               ),
-          "/cart": (context) => const MainLayout(
-                widget: CartPage(),
-                index: 2,
-              ),
+          "/cart": (context) => const CartScreen(),
           "/notifications": (context) => MainLayout(
                 widget: Container(
                   width: 100,
@@ -46,8 +44,9 @@ class MyApp extends StatelessWidget {
                 ),
                 index: 1,
               ),
-          "/user": (context) => const LayoutAuth(
+          "/user": (context) => LayoutAuth(
                 title: "Login",
+                wiget: null,
               ),
         },
       ),

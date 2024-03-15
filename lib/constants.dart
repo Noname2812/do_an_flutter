@@ -1,6 +1,43 @@
 import 'package:do_an/modals/index.dart';
 import 'package:flutter/material.dart';
 
+const List<Map<String, String>> ORDER_STATUS = [
+  {
+    "label": 'Tất cả',
+    "value": '',
+    "color": 'blue',
+  },
+  {
+    "label": 'Đang xử lý',
+    "value": 'processing',
+    "color": 'yellow',
+  },
+  {
+    "label": 'Đã xác nhận',
+    "value": 'confirmed',
+    "color": 'green',
+  },
+  {
+    "label": 'Đang giao hàng',
+    "value": 'delivering',
+    "color": 'geekblue',
+  },
+  {
+    "label": 'Đã giao hàng',
+    "value": 'delivered',
+    "color": 'orange',
+  },
+  {
+    "label": 'Đã nhận hàng',
+    "value": 'received',
+    "color": 'pink',
+  },
+  {
+    "label": 'Đã hủy',
+    "value": 'canceled',
+    "color": 'red',
+  },
+];
 List<ItemButtonNavBar> itemsBottomNavigationBav = [
   ItemButtonNavBar(title: "Home", icon: const Icon(Icons.home)),
   ItemButtonNavBar(

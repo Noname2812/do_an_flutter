@@ -1,9 +1,10 @@
 class User {
-  String? phoneNumber, name, birthday, address, image;
-  String email, id;
+  String? phoneNumber, name, birthday, address, image, id, password, email;
+
   User(
-      {required this.email,
-      required this.id,
+      {this.email,
+      this.id,
+      this.password,
       this.name,
       this.birthday,
       this.address,
@@ -21,6 +22,6 @@ class User {
     );
   }
   factory User.init() {
-    return User(email: "", id: "-1");
+    return User();
   }
 }

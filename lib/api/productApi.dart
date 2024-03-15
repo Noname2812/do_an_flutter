@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:do_an/api/requestGet.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchAll(String endpoint) async {
@@ -16,8 +17,7 @@ Future<Map<String, dynamic>> getDetailProduct(String id) async {
   final url = Uri.http(BASE_URL_LOCAL, '/v2/product/$id');
   final res = await http.get(url);
   if (res.statusCode == 200) {
-    final result = jsonDecode(res.body);
-    return result['product'];
+    return jsonDecode(res.body);
   } else {
     throw Exception("Call api falied !");
   }
@@ -34,6 +34,3 @@ Future<Map<String, dynamic>> getProductsByQuery(
     throw Exception("Call api falied !");
   }
 }
-
-const IP = "192.168.0.105";
-const BASE_URL_LOCAL = "$IP:8000";

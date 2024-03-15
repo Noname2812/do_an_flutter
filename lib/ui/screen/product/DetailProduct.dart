@@ -1,13 +1,29 @@
-import 'package:collection/collection.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:do_an/redux/store.dart';
+import 'package:do_an/ui/widgets/ModalBottomSheetOpen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:do_an/api/productApi.dart';
 import 'package:do_an/constants.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Product.dart';
 import 'package:do_an/ui/widgets/CarouselSlider.dart';
-import 'package:do_an/ui/widgets/Line.dart';
 import 'package:do_an/ui/widgets/Loading.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
+Future handleOntapBottomButton(
+    BuildContext context, DetailProduct product, int type) {
+  return showModalBottomSheet(
+      backgroundColor: Colors.grey[50],
+      context: context,
+      builder: (context) {
+        return ModalBottomSheetOpen(
+          product: product,
+          nameButton: type == 2 ? "Mua ngay" : "Add to cart",
+          type: type,
+        );
+      });
+}
 
 class DetailProductPage extends StatefulWidget {
   const DetailProductPage({super.key, required this.id});
@@ -23,8 +39,7 @@ class _DetailProductState extends State<DetailProductPage> {
   void getDataDetailProducts(String id) async {
     final res = await getDetailProduct(id);
     setState(() {
-      product = DetailProduct.fromJson(res);
-
+      product = DetailProduct.fromJson(res["product"]);
       isLoading = false;
     });
   }
@@ -37,6 +52,8 @@ class _DetailProductState extends State<DetailProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userID = StoreProvider.of<AppState>(context).state.user.id;
+
     return isLoading
         ? const Loading(
             isFullScreen: true,
@@ -50,7 +67,40 @@ class _DetailProductState extends State<DetailProductPage> {
                         child: InkWell(
                           onTap: () {
                             e.type == 1
-                                ? handleOntapBottomButton(context, product, 1)
+                                ? {
+                                    if (userID == null)
+                                      {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                                  title: const Text(
+                                                      "Are you going to login now ?"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator
+                                                              .pushReplacementNamed(
+                                                                  context,
+                                                                  "/user");
+                                                        },
+                                                        child:
+                                                            const Text("Yes")),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text("No"))
+                                                  ],
+                                                ))
+                                      }
+                                    else
+                                      {
+                                        handleOntapBottomButton(
+                                            context, product, 1)
+                                      }
+                                  }
                                 : handleOntapBottomButton(context, product, 2);
                           },
                           child: Container(
@@ -156,183 +206,4 @@ class _DetailProductState extends State<DetailProductPage> {
             )),
           );
   }
-}
-
-Future handleOntapBottomButton(
-    BuildContext context, DetailProduct product, int type) {
-  return showModalBottomSheet(
-      backgroundColor: Colors.grey[50],
-      context: context,
-      builder: (context) {
-        return ModalBottomSheetOpen(
-          product: product,
-          nameButton: type == 2 ? "Mua ngay" : "Add to cart",
-          hanldeOntap: () {},
-        );
-      });
-}
-
-class ModalBottomSheetOpen extends StatelessWidget {
-  const ModalBottomSheetOpen(
-      {super.key,
-      required this.product,
-      required this.nameButton,
-      required this.hanldeOntap});
-  final String nameButton;
-  final Function hanldeOntap;
-  final DetailProduct product;
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Positioned(
-          top: 2,
-          right: 16,
-          child: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Padding(
-              padding: EdgeInsets.all(5),
-              child: Text(
-                "X",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-              ),
-            ),
-          )),
-      Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0, right: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image(
-                      image: base64ToImageObject(product.images[0]),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          LayoutBuilder(
-                              builder: (context, contraint) => SizedBox(
-                                    width: contraint.maxWidth * 0.9,
-                                    child: Text(
-                                      maxLines: 3,
-                                      product.name,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 18),
-                                    ),
-                                  )),
-                          Row(
-                            children: [
-                              SizedBox(
-                                  child: Text(
-                                formatMoney(product.minprice.toDouble()),
-                                textAlign: TextAlign.start,
-                                textDirection: TextDirection.ltr,
-                                style: const TextStyle(
-                                    color: Colors.red, fontSize: 15),
-                              )),
-                              const SizedBox(
-                                  child: Text(
-                                " - ",
-                                textAlign: TextAlign.start,
-                                textDirection: TextDirection.ltr,
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 15),
-                              )),
-                              SizedBox(
-                                  child: Text(
-                                "${formatMoney(product.maxPrice.toDouble())} vnd",
-                                textAlign: TextAlign.start,
-                                textDirection: TextDirection.ltr,
-                                style: const TextStyle(
-                                    overflow: TextOverflow.fade,
-                                    color: Colors.red,
-                                    fontSize: 15),
-                              )),
-                            ],
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ),
-          createLine(Colors.grey, 1, MediaQuery.of(context).size.width),
-          Expanded(
-            flex: 6,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  ...product.groupOptions!.map((e) => Column(
-                        children: [
-                          Text(
-                            e['groupName'],
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            child: Column(
-                              children:
-                                  showAllOptions(e['options'] as List<dynamic>),
-                            ),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ),
-          Expanded(flex: 1, child: Container()),
-          Expanded(
-              flex: 1,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Colors.blue, borderRadius: BorderRadius.circular(5)),
-                child: TextButton(
-                  onPressed: () => hanldeOntap,
-                  child: Text(
-                    nameButton,
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-              ))
-        ],
-      ),
-    ]);
-  }
-}
-
-List<Widget> showAllOptions(List<dynamic> data) {
-  final List<dynamic> chunks = data.slices(4).toList();
-  return chunks
-      .map((item) => Row(
-            children: (item as List<dynamic>)
-                .map((e) => Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: TextButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey[300])),
-                          onPressed: () {},
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                                color: Colors.grey[800], fontSize: 12),
-                          )),
-                    ))
-                .toList(),
-          ))
-      .toList();
 }

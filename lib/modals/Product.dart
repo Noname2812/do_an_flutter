@@ -2,8 +2,10 @@ class Product {
   String name, id;
   int minprice, maxPrice;
   List<dynamic> images;
+  String? quantity;
   Product(
       {required this.images,
+      this.quantity,
       required this.name,
       required this.minprice,
       required this.id,
@@ -15,6 +17,30 @@ class Product {
         maxPrice: data['maxPrice'],
         id: data['_id'],
         images: data['images']);
+  }
+}
+
+class ProductOrder {
+  String? productCode, productName, note, productImage;
+  String? price, quantity, totalPrice;
+  ProductOrder(
+      {this.note,
+      this.productImage,
+      this.price,
+      this.productCode,
+      this.productName,
+      this.quantity,
+      this.totalPrice});
+  factory ProductOrder.fromJson(dynamic data) {
+    return ProductOrder(
+      note: data['note'].toString(),
+      productImage: data['productImage'].toString(),
+      productCode: data['productCode'].toString(),
+      productName: data['productName'].toString(),
+      price: data['price'].toString(),
+      quantity: data['quantity'].toString(),
+      totalPrice: data['totalPrice'].toString(),
+    );
   }
 }
 
@@ -51,17 +77,5 @@ class DetailProduct extends Product {
       productSKUBarcodes: data["productSKUBarcodes"],
       productSKUList: data['productSKUList'],
     );
-  }
-}
-
-class GroupOptions {
-  String groupName;
-  List<String> options;
-  String id;
-  GroupOptions(
-      {required this.groupName, required this.id, required this.options});
-  factory GroupOptions.fromJson(Map<String, dynamic> json) {
-    return GroupOptions(
-        groupName: json['groupName'], id: json['id'], options: json['options']);
   }
 }
