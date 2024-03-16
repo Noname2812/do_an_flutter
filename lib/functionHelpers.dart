@@ -72,3 +72,8 @@ Future<List<Order>> getOrderByUser(String userID) async {
       .map((item) => Order.fromMap(item))
       .toList();
 }
+
+String convertDateTime(String dateTimeStr) {
+  DateTime datetimeObj = DateTime.parse(dateTimeStr).toUtc();
+  return DateFormat('dd/MM/yyyy').format(datetimeObj);
+}

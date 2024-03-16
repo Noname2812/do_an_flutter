@@ -3,6 +3,7 @@ import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/screen/auth/LayoutAuth.dart';
 import 'package:do_an/ui/screen/cart/CartPage.dart';
 import 'package:do_an/ui/screen/home/HomePage.dart';
+import 'package:do_an/ui/screen/notification/NotificationPage.dart';
 import 'package:do_an/ui/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -36,14 +37,7 @@ class MyApp extends StatelessWidget {
                 index: 0,
               ),
           "/cart": (context) => const CartScreen(),
-          "/notifications": (context) => MainLayout(
-                widget: Container(
-                  width: 100,
-                  height: 100,
-                  color: Colors.red,
-                ),
-                index: 1,
-              ),
+          "/notifications": (context) => const NotificationPage(),
           "/user": (context) => LayoutAuth(
                 title: "Login",
                 wiget: null,
