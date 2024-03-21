@@ -170,14 +170,14 @@ class _CartListTileCardState extends State<CartListTileCard> {
                           content: const Text("Are you sure delete ?"),
                           actions: [
                             TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("NO")),
+                            TextButton(
                                 onPressed: () {
                                   handleDelete();
                                   Navigator.pop(context);
                                 },
                                 child: const Text("OK")),
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("NO"))
                           ],
                         ));
               },

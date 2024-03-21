@@ -10,7 +10,8 @@ class DetailOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
-    final dataOrder = store.state.orders?.firstWhere((item) => item.id == id);
+    final dataOrder = store.state.orders
+        ?.firstWhere((item) => item.id == id || item.orderCode == id);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -162,7 +163,8 @@ class DetailOrder extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            dataOrder.totalProductPrice,
+                            formatMoney(
+                                double.parse(dataOrder.totalProductPrice)),
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
@@ -175,7 +177,8 @@ class DetailOrder extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            dataOrder.voucherDiscount,
+                            formatMoney(
+                                double.parse(dataOrder.voucherDiscount)),
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
@@ -188,7 +191,7 @@ class DetailOrder extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            dataOrder.deliveryFee,
+                            formatMoney(double.parse(dataOrder.deliveryFee)),
                             style: const TextStyle(fontSize: 18),
                           )
                         ],
@@ -214,7 +217,7 @@ class DetailOrder extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            dataOrder.totalPrice,
+                            formatMoney(double.parse(dataOrder.totalPrice)),
                             style: const TextStyle(fontSize: 18),
                           )
                         ],

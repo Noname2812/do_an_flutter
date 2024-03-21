@@ -188,7 +188,7 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   Text(
-                    "Tổng tiền : ${e.totalPrice}",
+                    "Tổng tiền : ${formatMoney(double.parse(e.totalPrice))}",
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ],

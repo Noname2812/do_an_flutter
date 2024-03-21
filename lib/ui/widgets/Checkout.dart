@@ -1,6 +1,7 @@
 import 'package:do_an/api/cartApi.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
+import 'package:do_an/modals/Order.dart';
 import 'package:do_an/redux/actions.dart';
 import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/widgets/Loading.dart';
@@ -54,6 +55,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final res = await payment(p);
       if (res.statusCode == 200) {
         store.dispatch(GetCartSuccess(cart: List.empty()));
+        List<dynamic> orders = await getOrderByUser(store.state.user.id!);
+        store.dispatch(GetOrderSuccess(orders: orders as List<Order>));
         showDialog(
             // ignore: use_build_context_synchronously
             context: context,

@@ -154,6 +154,9 @@ Widget lineInfor(String title, int key, String? text, BuildContext context) {
           Expanded(
               child: TextButton(
                   onPressed: () {
+                    if (key == 1) {
+                      return;
+                    }
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -163,7 +166,7 @@ Widget lineInfor(String title, int key, String? text, BuildContext context) {
                           );
                         });
                   },
-                  child: const Text("Chỉnh sửa")))
+                  child: Text(key == 1 ? "" : "Chỉnh sửa")))
         ],
       ),
       createLine(Colors.grey, 1, MediaQuery.of(context).size.width),

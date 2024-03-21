@@ -1,5 +1,5 @@
 import 'package:do_an/modals/Cart.dart';
-import 'package:do_an/modals/Order.dart';
+import 'package:do_an/modals/Notification.dart';
 import 'package:do_an/modals/User.dart';
 import 'package:do_an/redux/actions.dart';
 import 'package:redux/redux.dart';
@@ -10,8 +10,10 @@ class AppState {
   bool isLoading;
   List<ItemCart> cart;
   List<dynamic>? orders;
+  List<NotificationUser> notifications;
   AppState(
       {required this.user,
+      required this.notifications,
       this.orders,
       required this.isLogined,
       required this.isLoading,
@@ -20,10 +22,12 @@ class AppState {
       {User? user,
       bool? isLogined,
       bool? isLoading,
+      List<NotificationUser>? notifications,
       String? messageError,
       List<dynamic>? orders,
       List<ItemCart>? cart}) {
     return AppState(
+        notifications: notifications ?? this.notifications,
         orders: orders ?? this.orders,
         cart: cart ?? this.cart,
         user: user ?? this.user,
@@ -33,6 +37,7 @@ class AppState {
 
   factory AppState.init() {
     return AppState(
+      notifications: List.empty(),
       orders: List.empty(),
       cart: List.empty(),
       user: User.init(),
@@ -47,8 +52,8 @@ class GetState {
   final bool isLoggedIn;
   final bool isLoading;
   final List<ItemCart> cart;
-  final void Function(User user, List<ItemCart> items, List<dynamic>? order)
-      login;
+  final void Function(User user, List<ItemCart> items, List<dynamic>? order,
+      List<NotificationUser>? notifications) login;
   final void Function(bool isLoading) setLoading;
   final void Function(bool isLogout) logout;
 
@@ -69,7 +74,12 @@ class GetState {
         user: store.state.user,
         setLoading: (bool isLoading) =>
             store.dispatch(StateLoading(isLoading: isLoading)),
-        login: (User user, List<ItemCart> items, List<dynamic>? order) => store
-            .dispatch(LoginSucess(user: user, items: items, order: order)));
+        login: (User user, List<ItemCart> items, List<dynamic>? order,
+                List<NotificationUser>? notifications) =>
+            store.dispatch(LoginSucess(
+                user: user,
+                items: items,
+                order: order,
+                notifications: notifications)));
   }
 }

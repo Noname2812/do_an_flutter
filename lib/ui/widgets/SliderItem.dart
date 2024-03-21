@@ -3,6 +3,7 @@ import 'package:do_an/modals/Product.dart';
 import 'package:do_an/ui/screen/product/ListProduct.dart';
 import 'package:do_an/ui/widgets/CartItem.dart';
 import 'package:do_an/ui/widgets/Loading.dart';
+import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -87,9 +88,7 @@ class SeeAllWidget extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       child: GestureDetector(
         onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ListProduct(param: "/"))),
+            context, SlidePageRoute(page: const ListProduct(param: "/"))),
         child: const Text(
           "See all",
           style: TextStyle(fontSize: 15, color: Colors.blue),
