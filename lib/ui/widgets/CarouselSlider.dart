@@ -8,10 +8,12 @@ class Carousel extends StatefulWidget {
       required this.list,
       required this.isAutoPlay,
       this.bgColor,
+      required this.type,
       required this.height});
   final List<dynamic> list;
   final bool isAutoPlay;
   final Color? bgColor;
+  final int type;
   final double height;
   @override
   State<Carousel> createState() => _CarouselState();
@@ -50,11 +52,14 @@ class _CarouselState extends State<Carousel> {
             items: widget.list.map((i) {
               return Builder(
                 builder: (BuildContext context) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: base64ToImageObject(i), fit: BoxFit.cover)),
-                  );
+                  return widget.type == 1
+                      ? Container(child: Image.asset(i))
+                      : Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: base64ToImageObject(i),
+                                  fit: BoxFit.cover)),
+                        );
                 },
               );
             }).toList(),

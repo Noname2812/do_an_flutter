@@ -5,6 +5,7 @@ import 'package:do_an/modals/Category.dart';
 import 'package:do_an/modals/Product.dart';
 import 'package:do_an/ui/screen/product/DetailProduct.dart';
 import 'package:do_an/ui/screen/product/ListProduct.dart';
+import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:do_an/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
@@ -30,10 +31,10 @@ class CartProduct extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailProductPage(
-                              id: product.id,
-                            )));
+                    SlidePageRoute(
+                        page: DetailProductPage(
+                      id: product.id,
+                    )));
               },
               child: Container(
                 height: 150,

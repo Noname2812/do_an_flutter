@@ -1,13 +1,18 @@
 import 'package:do_an/modals/Cart.dart';
+import 'package:do_an/modals/Notification.dart';
 import 'package:do_an/modals/Order.dart';
-import 'package:do_an/modals/Product.dart';
 import 'package:do_an/modals/User.dart';
 
 class LoginSucess {
   final List<ItemCart> items;
   final User user;
   final List<dynamic>? order;
-  LoginSucess({required this.user, required this.items, this.order});
+  final List<NotificationUser>? notifications;
+  LoginSucess(
+      {required this.user,
+      required this.items,
+      this.order,
+      this.notifications});
   @override
   String toString() {
     return 'LoginSucess(user: $user)';
@@ -47,4 +52,9 @@ class ChangeInfo {
 class GetOrderSuccess {
   List<Order> orders;
   GetOrderSuccess({required this.orders});
+}
+
+class GetNotification {
+  List<NotificationUser> notifications;
+  GetNotification({required this.notifications});
 }

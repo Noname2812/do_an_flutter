@@ -1,6 +1,7 @@
 import 'package:do_an/api/authApit.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
+import 'package:do_an/modals/Notification.dart';
 import 'package:do_an/modals/Order.dart';
 import 'package:do_an/modals/User.dart';
 import 'package:do_an/redux/store.dart';
@@ -44,7 +45,9 @@ class _LoginPageState extends State<LoginPage> {
             if (resultLogin["message"] == null) {
               List<ItemCart> cart = await getCartByUser(resultLogin["id"]);
               List<dynamic> orders = await getOrderByUser(resultLogin["id"]);
-              vm.login(User.fromJson(resultLogin), cart, orders);
+              List<NotificationUser> notifications =
+                  await getNotificationByUser(resultLogin["id"]);
+              vm.login(User.fromJson(resultLogin), cart, orders, notifications);
             } else {
               vm.setLoading(false);
               message = resultLogin["message"];

@@ -6,6 +6,7 @@ import 'package:do_an/redux/store.dart';
 AppState reducerAppState(AppState state, dynamic action) {
   if (action is LoginSucess) {
     return state.coppyWith(
+        notifications: action.notifications,
         user: action.user,
         orders: action.order,
         isLogined: true,
@@ -17,6 +18,8 @@ AppState reducerAppState(AppState state, dynamic action) {
         user: User.init(),
         isLogined: !action.isLogout,
         isLoading: false,
+        notifications: List.empty(),
+        orders: List.empty(),
         cart: List.empty());
   }
   if (action is StateLoading) {
@@ -36,5 +39,9 @@ AppState reducerAppState(AppState state, dynamic action) {
   if (action is ChangeInfo) {
     return state.coppyWith(user: action.user);
   }
+  if (action is GetOrderSuccess) {
+    return state.coppyWith(orders: action.orders);
+  }
+  if (action is GetNotification) {}
   return state;
 }

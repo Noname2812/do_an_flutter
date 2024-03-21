@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:do_an/api/authApit.dart';
 import 'package:do_an/api/cartApi.dart';
+import 'package:do_an/api/notification.dart';
 import 'package:do_an/modals/Cart.dart';
+import 'package:do_an/modals/Notification.dart';
 import 'package:do_an/modals/Order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -71,4 +73,16 @@ Future<List<Order>> getOrderByUser(String userID) async {
   return (result["orders"] as List<dynamic>)
       .map((item) => Order.fromMap(item))
       .toList();
+}
+
+Future<List<NotificationUser>> getNotificationByUser(String userID) async {
+  final result = await getNotification(userID);
+  return (result["data"] as List<dynamic>)
+      .map((item) => NotificationUser.fromMap(item))
+      .toList();
+}
+
+String convertDateTime(String dateTimeStr) {
+  DateTime datetimeObj = DateTime.parse(dateTimeStr).toUtc();
+  return DateFormat('dd/MM/yyyy').format(datetimeObj);
 }

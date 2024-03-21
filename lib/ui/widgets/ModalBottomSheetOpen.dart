@@ -8,6 +8,7 @@ import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/widgets/Checkout.dart';
 import 'package:do_an/ui/widgets/CustomSteper.dart';
 import 'package:do_an/ui/widgets/Line.dart';
+import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -319,18 +320,17 @@ class _ModalBottomSheetOpenState extends State<ModalBottomSheetOpen> {
                           } else {
                             Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => CheckoutPage(
-                                          type: 2,
-                                          item: ItemCart(
-                                              totalPrice:
-                                                  quantity * int.parse(price),
-                                              customerId: userID,
-                                              quantity: quantity,
-                                              productSKUBarcode: barcode,
-                                              product: widget.product,
-                                              price: int.parse(price)),
-                                        )));
+                                SlidePageRoute(
+                                    page: CheckoutPage(
+                                  type: 2,
+                                  item: ItemCart(
+                                      totalPrice: quantity * int.parse(price),
+                                      customerId: userID,
+                                      quantity: quantity,
+                                      productSKUBarcode: barcode,
+                                      product: widget.product,
+                                      price: int.parse(price)),
+                                )));
                           }
                         },
                   child: Text(

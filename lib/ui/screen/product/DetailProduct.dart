@@ -2,6 +2,7 @@
 import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/widgets/ModalBottomSheetOpen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:do_an/api/productApi.dart';
@@ -53,7 +54,6 @@ class _DetailProductState extends State<DetailProductPage> {
   @override
   Widget build(BuildContext context) {
     final userID = StoreProvider.of<AppState>(context).state.user.id;
-
     return isLoading
         ? const Loading(
             isFullScreen: true,
@@ -126,7 +126,9 @@ class _DetailProductState extends State<DetailProductPage> {
                       borderRadius: BorderRadius.circular(50),
                       color: Colors.grey[50]),
                   child: IconButton(
-                      icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () =>
+                          Navigator.pushReplacementNamed(context, "/cart")),
                 )
               ],
             ),
@@ -146,6 +148,7 @@ class _DetailProductState extends State<DetailProductPage> {
                             isAutoPlay: false,
                             bgColor: Colors.grey[100],
                             height: 300,
+                            type: 2,
                           ),
                           // price
                           Row(
@@ -181,10 +184,11 @@ class _DetailProductState extends State<DetailProductPage> {
                           ),
                           // description
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Mô tả sản phẩm:",
                                   style: TextStyle(
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                               HtmlWidget(
                                 product.description ?? "",

@@ -1,5 +1,6 @@
 import 'package:do_an/ui/screen/product/ListProduct.dart';
 import 'package:do_an/ui/widgets/ButtonNavBar.dart';
+import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:flutter/material.dart';
 
 class MainLayout extends StatelessWidget {
@@ -44,10 +45,10 @@ class SearchBarApp extends StatelessWidget {
         onFieldSubmitted: (value) {
           Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => ListProduct(
-                        param: "/search/$value",
-                      )));
+              SlidePageRoute(
+                  page: ListProduct(
+                param: "/search/$value",
+              )));
         },
         decoration: InputDecoration(
           border: const OutlineInputBorder(

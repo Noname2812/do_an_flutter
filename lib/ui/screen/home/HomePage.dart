@@ -41,9 +41,14 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         const Carousel(
-          list: [],
+          list: [
+            'assets/images/banner1.jpeg',
+            'assets/images/banner2.jpeg',
+            'assets/images/banner3.png'
+          ],
           isAutoPlay: true,
           height: 200,
+          type: 1,
         ),
         SliderItem(
           title: "Categories",

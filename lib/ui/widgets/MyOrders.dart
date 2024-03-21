@@ -1,7 +1,9 @@
 import 'package:do_an/constants.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/redux/store.dart';
+import 'package:do_an/ui/screen/profile/DetailOrder.dart';
 import 'package:do_an/ui/widgets/EmptyWidget.dart';
+import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
@@ -49,13 +51,13 @@ class _MyOrdersState extends State<MyOrders>
               .toList(),
         ),
         viewListOrders(
-            store.state.orders!, ORDER_STATUS[_activeIndex]['value']!)
+            store.state.orders!, ORDER_STATUS[_activeIndex]['value']!, context)
       ],
     );
   }
 }
 
-Widget viewListOrders(List<dynamic> orders, String type) {
+Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
   List<dynamic> dataView = [];
   if (type != '') {
     for (var element in orders) {
@@ -81,9 +83,29 @@ Widget viewListOrders(List<dynamic> orders, String type) {
                 "ID: ${e.orderCode}",
                 style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
-              Text(
-                "Status: ${e.status}",
-                style: const TextStyle(color: Colors.white, fontSize: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Status: ${e.status}",
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context, SlidePageRoute(page: DetailOrder(id: e.id))),
+                    child: const Text(
+                      "Xem chi tiết",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white,
+                        decorationThickness: 2,
+                      ),
+                    ),
+                  )
+                ],
               ),
               ...(e.products as List<dynamic>).map((item) => Card(
                     elevation: 2,
@@ -166,7 +188,7 @@ Widget viewListOrders(List<dynamic> orders, String type) {
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   Text(
-                    "Tổng tiền : ${e.totalPrice}",
+                    "Tổng tiền : ${formatMoney(double.parse(e.totalPrice))}",
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ],
