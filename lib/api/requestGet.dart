@@ -20,5 +20,5 @@ Future<Map<String, dynamic>> requestMethodGet(MethodGet param) async {
   }
 }
 
-const IP = "172.17.0.86";
+const IP = "192.168.0.102";
 const BASE_URL_LOCAL = "$IP:8000";

@@ -90,6 +90,22 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                     "Status: ${e.status}",
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
+                  e.status == "delivered"
+                      ? TextButton(
+                          onPressed: () {},
+                          child: Container(
+                            color: Colors.orange,
+                            padding: const EdgeInsets.all(5.0),
+                            child: const Text(
+                              "Đã nhận được hàng",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(
+                          width: 0,
+                          height: 0,
+                        ),
                   InkWell(
                     onTap: () => Navigator.push(
                         context, SlidePageRoute(page: DetailOrder(id: e.id))),
@@ -144,7 +160,7 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                                           Text(
                                             item.productName!,
                                             style: const TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 15,
                                                 color: Colors.black),
                                           ),
                                           const SizedBox(
@@ -162,13 +178,13 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                                     Text(
                                       'Số lượng: ${item.quantity!}',
                                       style: const TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.w700),
                                     ),
                                     Text(
                                       '\$${formatMoney(double.parse(item.totalPrice))}',
                                       style: const TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ],
@@ -185,11 +201,11 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                 children: [
                   Text(
                     "Phương thức thanh toán : ${e.paymentMethod}",
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   Text(
                     "Tổng tiền : ${formatMoney(double.parse(e.totalPrice))}",
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
                   ),
                 ],
               ),
