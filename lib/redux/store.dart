@@ -2,9 +2,11 @@ import 'package:do_an/modals/Cart.dart';
 import 'package:do_an/modals/Notification.dart';
 import 'package:do_an/modals/User.dart';
 import 'package:do_an/redux/actions.dart';
+import 'package:do_an/services/NotificationServices.dart';
 import 'package:redux/redux.dart';
 
 class AppState {
+  NotificationServices services;
   User user;
   bool isLogined;
   bool isLoading;
@@ -13,6 +15,7 @@ class AppState {
   List<NotificationUser> notifications;
   AppState(
       {required this.user,
+      required this.services,
       required this.notifications,
       this.orders,
       required this.isLogined,
@@ -27,6 +30,7 @@ class AppState {
       List<dynamic>? orders,
       List<ItemCart>? cart}) {
     return AppState(
+        services: this.services,
         notifications: notifications ?? this.notifications,
         orders: orders ?? this.orders,
         cart: cart ?? this.cart,
@@ -43,6 +47,7 @@ class AppState {
       user: User.init(),
       isLogined: false,
       isLoading: false,
+      services: NotificationServices(),
     );
   }
 }
