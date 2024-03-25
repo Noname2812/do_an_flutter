@@ -42,6 +42,8 @@ AppState reducerAppState(AppState state, dynamic action) {
   if (action is GetOrderSuccess) {
     return state.coppyWith(orders: action.orders);
   }
-  if (action is GetNotification) {}
+  if (action is GetNotification) {
+    return state.coppyWith(notifications: action.notifications);
+  }
   return state;
 }

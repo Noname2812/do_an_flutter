@@ -2,7 +2,6 @@ import 'package:do_an/api/authApit.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
 import 'package:do_an/modals/Notification.dart';
-import 'package:do_an/modals/Order.dart';
 import 'package:do_an/modals/User.dart';
 import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/screen/auth/Signup.dart';

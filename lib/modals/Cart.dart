@@ -142,17 +142,20 @@ class ParamPayment {
       totalProductPrice,
       paymentMethod,
       deliveryAddress;
+  String? voucherCode, discountValue;
   String? deliveryFee;
   List<ItemCart> products;
   ParamPayment(
       {required this.userID,
       required this.totalProductPrice,
       required this.products,
+      this.discountValue,
       required this.customerName,
       required this.customerPhone,
       required this.customerEmail,
       required this.paymentMethod,
       required this.deliveryAddress,
+      this.voucherCode,
       this.deliveryFee});
 
   Map<String, dynamic> toMap() {
@@ -175,6 +178,8 @@ class ParamPayment {
               })
           .toList()),
       'paymentMethod': paymentMethod,
+      "voucherCode": voucherCode ?? '',
+      'discountValue': discountValue ?? '0',
     };
   }
 }

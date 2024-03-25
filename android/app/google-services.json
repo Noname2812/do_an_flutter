@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766303790765",
+    "project_id": "do-an-web-7e477-2147b",
+    "storage_bucket": "do-an-web-7e477-2147b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766303790765:android:cc30a635273de940738824",
+        "android_client_info": {
+          "package_name": "com.example.do_an"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi8BK1qNjsQ2LXz00uGLfUc2EPSvUGzWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

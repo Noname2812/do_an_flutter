@@ -44,6 +44,9 @@ dependencies:
   localstorage: ^4.0.1+4
   google_fonts: ^6.2.0
   scrollable_tab_view: ^1.0.3
+  firebase_core: ^2.27.1
+  firebase_messaging: ^14.7.20
+  flutter_local_notifications: ^17.0.0
 
 dev_dependencies:
   flutter_test:
