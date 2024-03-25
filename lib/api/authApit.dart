@@ -108,3 +108,13 @@ Future<Map<String, dynamic>> getOrder(String id) async {
     throw Exception("Call api falied !");
   }
 }
+
+Future<http.Response> changeStatusOrder(String id, String userID) async {
+  final url = Uri.http(
+    BASE_URL_LOCAL,
+    '/v2/order/change-status/id',
+  );
+  final res = await http
+      .put(url, body: {"status": "received"}, headers: {"userId": userID});
+  return res;
+}

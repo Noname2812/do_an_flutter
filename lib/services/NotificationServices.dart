@@ -1,5 +1,9 @@
 import 'dart:io';
-import 'dart:math';
+import 'package:do_an/functionHelpers.dart';
+import 'package:do_an/modals/Notification.dart';
+import 'package:do_an/modals/Order.dart';
+import 'package:do_an/redux/actions.dart';
+import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/screen/profile/DetailOrder.dart';
 import 'package:do_an/ui/widgets/SlidePageRoute.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:redux/redux.dart';
 
 class NotificationServices {
   //initialising firebase message plugin
@@ -17,8 +22,8 @@ class NotificationServices {
       FlutterLocalNotificationsPlugin();
 
   //function to initialise flutter local notification plugin to show notifications for android when app is active
-  void initLocalNotifications(
-      BuildContext context, RemoteMessage message) async {
+  void initLocalNotifications(BuildContext context, RemoteMessage message,
+      GlobalKey<NavigatorState> key) async {
     var androidInitializationSettings =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitializationSettings = const DarwinInitializationSettings();
@@ -27,25 +32,31 @@ class NotificationServices {
         android: androidInitializationSettings, iOS: iosInitializationSettings);
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSetting,
-        onDidReceiveNotificationResponse: (payload) {
-      // handle interaction when app is active for android
-      handleMessage(context, message);
-    });
+        onDidReceiveNotificationResponse: (payload) =>
+            handleMessage(context, key, message));
   }
 
-  void firebaseInit(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification!.android;
-      if (kDebugMode) {
-        print("notifications title:${notification!.title}");
-        print("notifications body:${notification.body}");
-        print('count:${android!.count}');
-        print('data:${message.data.toString()}');
-      }
+  void firebaseInit(BuildContext context, Store<AppState> store,
+      GlobalKey<NavigatorState> key) {
+    FirebaseMessaging.onMessage.listen((message) async {
+      // RemoteNotification? notification = message.notification;
+      // AndroidNotification? android = message.notification!.android;
+      // if (kDebugMode) {
+      //   print("notifications title:${notification!.title}");
+      //   print("notifications body:${notification.body}");
+      //   print('count:${android!.count}');
+      //   print('data:${message.data.toString()}');
+      // }
       if (Platform.isAndroid) {
-        initLocalNotifications(context, message);
+        initLocalNotifications(context, message, key);
         showNotification(message);
+        if (store.state.user.id != null) {
+          List<dynamic> orders = await getOrderByUser(store.state.user.id!);
+          List<NotificationUser> notifications =
+              await getNotificationByUser(store.state.user.id!);
+          store.dispatch(GetOrderSuccess(orders: orders as List<Order>));
+          store.dispatch(GetNotification(notifications: notifications));
+        }
       }
     });
   }
@@ -130,31 +141,27 @@ class NotificationServices {
     });
   }
 
-  //handle tap on notification when app is in background or terminated
-  Future<void> setupInteractMessage(BuildContext context) async {
+  Future<void> setupInteractMessage(
+      BuildContext context, GlobalKey<NavigatorState> key) async {
     // when app is terminated
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      handleMessage(context, initialMessage);
+      // ignore: use_build_context_synchronously
+      handleMessage(context, key, initialMessage);
     }
-
-    //when app ins background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      handleMessage(context, event);
+      handleMessage(context, key, event);
     });
   }
 
-  void handleMessage(BuildContext context, RemoteMessage message) {
-    if (message.data['type'] == 'msj') {
-      Navigator.push(
-          context,
-          SlidePageRoute(
-              page: DetailOrder(
-            id: message.data['id'],
-          )));
-    }
+  void handleMessage(BuildContext context, GlobalKey<NavigatorState> key,
+      RemoteMessage message) {
+    key.currentState?.pushReplacement(MaterialPageRoute(
+        builder: (context) => DetailOrder(
+              id: message.notification!.body!.split(' ')[2],
+            )));
   }
 
   Future forgroundMessage() async {

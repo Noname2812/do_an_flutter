@@ -1,5 +1,8 @@
+import 'package:do_an/api/authApit.dart';
 import 'package:do_an/constants.dart';
 import 'package:do_an/functionHelpers.dart';
+import 'package:do_an/modals/Order.dart';
+import 'package:do_an/redux/actions.dart';
 import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/screen/profile/DetailOrder.dart';
 import 'package:do_an/ui/widgets/EmptyWidget.dart';
@@ -37,7 +40,6 @@ class _MyOrdersState extends State<MyOrders>
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
-
     return Column(
       children: [
         ScrollableTabBar(
@@ -59,6 +61,19 @@ class _MyOrdersState extends State<MyOrders>
 
 Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
   List<dynamic> dataView = [];
+  final store = StoreProvider.of<AppState>(context);
+  void handleOntap(String id) async {
+    final res = await changeStatusOrder(id, store.state.user.id!);
+    if (res.statusCode == 200) {
+      final index = orders.indexWhere((item) => item.id == id);
+      if (index != -1) {
+        var temp = (orders[index] as Order).copyWith(status: "received");
+        orders.removeAt(index);
+        store.dispatch(GetOrderSuccess(orders: [...orders, temp]));
+      }
+    }
+  }
+
   if (type != '') {
     for (var element in orders) {
       if (element.status! == type) {
@@ -92,7 +107,24 @@ Widget viewListOrders(List<dynamic> orders, String type, BuildContext context) {
                   ),
                   e.status == "delivered"
                       ? TextButton(
-                          onPressed: () {},
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text("Change status"),
+                                    content: const Text(
+                                        "Bạn có chắc chắn xác nhận đã nhận hàng ?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("NO")),
+                                      TextButton(
+                                        onPressed: () =>
+                                            handleOntap(e.orderCode),
+                                        child: const Text("YES"),
+                                      )
+                                    ],
+                                  )),
                           child: Container(
                             color: Colors.orange,
                             padding: const EdgeInsets.all(5.0),

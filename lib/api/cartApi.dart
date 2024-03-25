@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:do_an/modals/Cart.dart';
+import 'package:do_an/modals/Voucher.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:do_an/api/requestGet.dart';
@@ -57,4 +58,21 @@ Future<http.Response> payment(ParamPayment p) async {
   final res =
       await http.post(url, body: p.toMap(), headers: {"userId": p.userID});
   return res;
+}
+
+Future<List<Voucher>> getVoucher() async {
+  final url = Uri.http(
+    BASE_URL_LOCAL,
+    '/v2/voucher/get-list/',
+  );
+  final res = await http.get(url);
+  if (res.statusCode == 200) {
+    final result = jsonDecode(res.body) as Map<String, dynamic>;
+
+    return (result['vouchers'] as List<dynamic>)
+        .map((e) => Voucher.fromMap(e))
+        .toList();
+  } else {
+    throw Exception("Call api falied !");
+  }
 }

@@ -13,7 +13,6 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
-    // print(store.state.notifications[0].body!.split(' ')[2]);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,

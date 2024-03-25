@@ -1,6 +1,5 @@
 import 'package:do_an/redux/reducer.dart';
 import 'package:do_an/redux/store.dart';
-import 'package:do_an/services/NotificationServices.dart';
 import 'package:do_an/ui/screen/auth/LayoutAuth.dart';
 import 'package:do_an/ui/screen/cart/CartPage.dart';
 import 'package:do_an/ui/screen/home/HomePage.dart';
@@ -9,7 +8,6 @@ import 'package:do_an/ui/widgets/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'firebase_options.dart';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:redux/redux.dart';
@@ -38,14 +36,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey(debugLabel: "Main Navigator");
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     store.state.services.requestNotificationPermission();
     store.state.services.forgroundMessage();
-    store.state.services.firebaseInit(context);
-    store.state.services.setupInteractMessage(context);
+    store.state.services.firebaseInit(context, store, navigatorKey);
+    store.state.services.setupInteractMessage(context, navigatorKey);
     store.state.services.isTokenRefresh();
     store.state.services.getDeviceToken().then((value) {
       print('device token');
@@ -58,6 +57,7 @@ class _MyAppState extends State<MyApp> {
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Fashion Online',
         theme: ThemeData(
