@@ -75,7 +75,7 @@ class _ModalBottomSheetOpenState extends State<ModalBottomSheetOpen> {
   }
 
   void onChangeBarcode() {
-    if (productSKU.toList().length == 2) {
+    if (productSKU.toList().length == widget.product.groupOptions?.length) {
       String option1 = getValueByKey(
           productSKU, widget.product.groupOptions![0]["groupName"]);
       String option2 = getValueByKey(
@@ -93,14 +93,14 @@ class _ModalBottomSheetOpenState extends State<ModalBottomSheetOpen> {
     final store = StoreProvider.of<AppState>(context);
 
     void handleAddToCart() async {
-      if (productSKU.toList().length != 2) {
+      if (productSKU.toList().length != widget.product.groupOptions?.length) {
         showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
                   actions: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context); // Close the dialog
+                        Navigator.pop(context);
                       },
                       child: const Text('OK'),
                     ),
@@ -120,7 +120,6 @@ class _ModalBottomSheetOpenState extends State<ModalBottomSheetOpen> {
                 price: price,
                 productId: widget.product.id),
             userID!);
-
         if (res.statusCode == 200) {
           List<ItemCart> cart = await getCartByUser(userID);
           store.dispatch(GetCartSuccess(cart: cart));

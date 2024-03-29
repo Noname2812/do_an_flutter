@@ -80,7 +80,7 @@ class CartScreen extends StatelessWidget {
                                             height: 5,
                                           ),
                                           Text(
-                                            "\$ ${formatMoney(caculatorCart(vm.cart))}",
+                                            "\$ ${formatMoney(caculatorCart(vm.cart).toDouble())}",
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold),

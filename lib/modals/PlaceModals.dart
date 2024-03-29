@@ -1,13 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 class Province {
-  String? id, name;
+  String? name;
+  int? id;
   Province({
     this.id,
-    name,
+    this.name,
   });
 
-  factory Province.fromMap(Map<String, dynamic> map) {
+  factory Province.fromMap(dynamic map) {
     return Province(
       id: map["ProvinceID"],
       name: map["ProvinceName"],
@@ -16,26 +17,28 @@ class Province {
 }
 
 class District {
-  String? id, name;
+  String? name;
+  int? id;
   District({
     this.id,
-    name,
+    this.name,
   });
-  factory District.fromMap(Map<String, dynamic> map) {
+  factory District.fromMap(dynamic map) {
     return District(
-      id: map["ProvinceID"],
+      id: map["DistrictID"],
       name: map["DistrictName"],
     );
   }
 }
 
 class Ward {
-  String? id, name;
+  String? name;
+  String? id;
   Ward({
     this.id,
-    name,
+    this.name,
   });
-  factory Ward.fromMap(Map<String, dynamic> map) {
+  factory Ward.fromMap(dynamic map) {
     return Ward(
       id: map["WardCode"],
       name: map["WardName"],
@@ -55,17 +58,16 @@ class ParamGetFee {
       required this.to_ward_code});
   Map<String, String> toJson() {
     return {
-      "from_district_id": "1450",
-      "from_ward_code": "20805",
-      "service_id": "53320",
+      "from_district_id": "1454",
+      "from_ward_code": "21211",
       "to_district_id": this.to_district_id,
       "to_ward_code": this.to_ward_code,
-      "height": this.height ?? "50",
-      "length": this.length ?? "20",
-      "weight": this.weight ?? "200",
-      "width": "20",
       "insurance_value": this.insurance_value,
       "cod_failed_amount": "100000",
+      "height": "50",
+      "length": "20",
+      "weight": "200",
+      "width": "20",
     };
   }
 }

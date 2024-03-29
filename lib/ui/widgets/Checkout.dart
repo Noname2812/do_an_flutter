@@ -1,7 +1,9 @@
 import 'package:do_an/api/cartApi.dart';
+import 'package:do_an/api/giaoHangNhanhApi.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
 import 'package:do_an/modals/Order.dart';
+import 'package:do_an/modals/PlaceModals.dart';
 import 'package:do_an/modals/Voucher.dart';
 import 'package:do_an/redux/actions.dart';
 import 'package:do_an/redux/store.dart';
@@ -24,6 +26,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   double discountValue = 0;
+  int deliveryFee = 0;
+  String? provinceID, districtID;
   Map<String, String> voucher = {"name": "", "voucherCode": ""};
   @override
   void dispose() {
@@ -31,6 +35,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    provinceID = "";
+    districtID = "";
     super.dispose();
   }
 
@@ -54,10 +60,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
     addressController.text = store.state.user.address ?? '';
     phoneController.text = store.state.user.phoneNumber ?? '';
     emailController.text = store.state.user.email ?? '';
-    String totalPrice = widget.type == 1
-        ? formatMoney(
-            caculatorCart(store.state.cart).toDouble() - discountValue)
-        : formatMoney(widget.item!.totalPrice!.toDouble() - discountValue);
+    double totalPrice = widget.type == 1
+        ? caculatorCart(store.state.cart).toDouble()
+        : widget.item!.totalPrice!.toDouble();
+    void getFeeDelivery(String value) async {
+      final res = await getFee(ParamGetFee(
+          insurance_value: widget.type == 1
+              ? caculatorCart(store.state.cart).toString()
+              : widget.item!.totalPrice.toString(),
+          to_district_id: districtID!,
+          to_ward_code: value));
+      setState(() {
+        deliveryFee = res["total"];
+      });
+    }
+
     void handlePayment() async {
       ParamPayment p = ParamPayment(
           voucherCode: voucher["voucherCode"],
@@ -70,7 +87,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           customerName: nameController.text,
           customerPhone: phoneController.text,
           customerEmail: emailController.text,
-          deliveryFee: '0',
+          deliveryFee: deliveryFee.toString(),
           paymentMethod: "cash",
           deliveryAddress: "deliveryAddress");
       final res = await payment(p);
@@ -172,6 +189,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ));
     }
 
+    void handleSelectProvince(String value) {
+      setState(() {
+        provinceID = value;
+      });
+    }
+
+    void handleSelectDistrict(String value) {
+      setState(() {
+        districtID = value;
+      });
+    }
+
+    void handleSelectWard(String value) {
+      getFeeDelivery(value);
+    }
+
+    // print({"province": provinceID, "district": districtID, "ward": wardID});
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -208,17 +242,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         },
                       ),
                       TextFormField(
-                        controller: addressController,
-                        decoration: const InputDecoration(
-                            labelText: "Địa chỉ nhận hàng"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a value';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
                         controller: phoneController,
                         decoration: const InputDecoration(labelText: "SĐT"),
                         validator: (value) {
@@ -237,6 +260,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           }
                           return null;
                         },
+                      ),
+                      DropdownWidget(
+                        type: 0,
+                        function: handleSelectProvince,
+                      ),
+                      DropdownWidget(
+                        type: 1,
+                        function: handleSelectDistrict,
+                        provinceID: provinceID,
+                      ),
+                      DropdownWidget(
+                        type: 2,
+                        function: handleSelectWard,
+                        districtID: districtID,
+                      ),
+                      TextFormField(
+                        controller: addressController,
+                        decoration: const InputDecoration(
+                            labelText: "Địa chỉ chi tiết nhận hàng"),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 10),
@@ -258,16 +300,34 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: Text(
-                                  "Tổng tiền đơn hàng: $totalPrice đ",
+                                  "Tiền tổng sản phẩm: ${formatMoney(totalPrice)} đ",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                      fontSize: 15),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: Text(
-                                  voucher["name"] ?? "",
+                                  "Phí giao hàng: ${formatMoney(deliveryFee.toDouble())} đ",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Số tiền giảm: ${formatMoney(discountValue)}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Tổng tiền phải trả:${formatMoney(totalPrice - discountValue + deliveryFee.toDouble())}đ",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.red,
@@ -278,7 +338,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                       ),
-                      const DropdownWidget(),
                       ElevatedButton(
                         onPressed: () {
                           bool? isValid = _formKey.currentState?.validate();

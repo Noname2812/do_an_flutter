@@ -24,12 +24,12 @@ String formatMoney(double money) {
   return oCcy.format(money);
 }
 
-double caculatorCart(List<ItemCart> list) {
+int caculatorCart(List<ItemCart> list) {
   var total = 0;
   for (var element in list) {
     total += element.totalPrice!;
   }
-  return total.toDouble();
+  return total;
 }
 
 String? keyExists(Set<Map<String, String>> data, String key, String value) {

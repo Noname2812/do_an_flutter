@@ -10,9 +10,9 @@ import 'package:do_an/api/requestGet.dart';
 Future<Map<String, dynamic>> getCart(String id) async {
   final url = Uri.http(
     BASE_URL_LOCAL,
-    '/v2/cart/',
+    '/v2/cart',
   );
-  final res = await http.get(url, headers: {"userid": id});
+  final res = await http.get(url, headers: {"userId": id});
   if (res.statusCode == 200) {
     final result = jsonDecode(res.body);
     return result;
