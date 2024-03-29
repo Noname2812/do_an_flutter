@@ -1,5 +1,6 @@
 import 'package:do_an/api/cartApi.dart';
 import 'package:do_an/api/giaoHangNhanhApi.dart';
+import 'package:do_an/api/requestGet.dart';
 import 'package:do_an/functionHelpers.dart';
 import 'package:do_an/modals/Cart.dart';
 import 'package:do_an/modals/Order.dart';
@@ -10,6 +11,8 @@ import 'package:do_an/redux/store.dart';
 import 'package:do_an/ui/widgets/DropdownWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vnpay_flutter/vnpay_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key, this.item, required this.type});
@@ -75,8 +78,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
     }
 
-    void handlePayment() async {
+    void handlePayment(String paymentMethod, String? paid) async {
       ParamPayment p = ParamPayment(
+          totalPaid: paymentMethod == "cash" ? "0" : paid,
           voucherCode: voucher["voucherCode"],
           discountValue: discountValue.toString(),
           userID: store.state.user.id!,
@@ -88,7 +92,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           customerPhone: phoneController.text,
           customerEmail: emailController.text,
           deliveryFee: deliveryFee.toString(),
-          paymentMethod: "cash",
+          paymentMethod: paymentMethod,
           deliveryAddress: "deliveryAddress");
       final res = await payment(p);
       if (res.statusCode == 200) {
@@ -205,7 +209,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
       getFeeDelivery(value);
     }
 
-    // print({"province": provinceID, "district": districtID, "ward": wardID});
+    void onPaymentWithVNP(double totalPrice, String title) async {
+      final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
+        url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+        version: '2.0.0',
+        tmnCode: '0HU69EBU',
+        txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
+        orderInfo: title,
+        amount: totalPrice,
+        returnUrl: "http://localhost:8000",
+        ipAdress: "192.168.0.107",
+        vnpayHashKey: 'VEXPZRANPKSPPPFTGBPBNIZHIDOCFNQA',
+      );
+      print({"paymentUrl": paymentUrl});
+      VNPAYFlutter.instance.show(
+        paymentUrl: paymentUrl,
+        onPaymentSuccess: (params) {
+          handlePayment("vnpay", (params["vnp_TmnCode"] / 100).toString());
+        },
+        onPaymentError: (params) {},
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -338,15 +363,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          bool? isValid = _formKey.currentState?.validate();
-                          if (isValid!) {
-                            store.dispatch(StateLoading(isLoading: true));
-                            handlePayment();
-                          }
-                        },
-                        child: const Text('Submit'),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              bool? isValid = _formKey.currentState?.validate();
+                              if (isValid!) {
+                                store.dispatch(StateLoading(isLoading: true));
+                                handlePayment("cash", null);
+                              }
+                            },
+                            child: const Text('Submit'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              bool? isValid = _formKey.currentState?.validate();
+                              if (isValid!) {
+                                onPaymentWithVNP(
+                                    totalPrice -
+                                        discountValue +
+                                        deliveryFee.toDouble(),
+                                    "Thanh toán hóa đơn giá ${totalPrice - discountValue + deliveryFee.toDouble()}");
+                              }
+                            },
+                            child: const Text('Payment with VNP'),
+                          ),
+                        ],
                       ),
                     ],
                   ))

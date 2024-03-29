@@ -142,7 +142,7 @@ class ParamPayment {
       totalProductPrice,
       paymentMethod,
       deliveryAddress;
-  String? voucherCode, discountValue;
+  String? voucherCode, discountValue, totalPaid;
   String? deliveryFee;
   List<ItemCart> products;
   ParamPayment(
@@ -150,6 +150,7 @@ class ParamPayment {
       required this.totalProductPrice,
       required this.products,
       this.discountValue,
+      this.totalPaid,
       required this.customerName,
       required this.customerPhone,
       required this.customerEmail,
@@ -180,6 +181,7 @@ class ParamPayment {
       'paymentMethod': paymentMethod,
       "voucherCode": voucherCode ?? '',
       'discountValue': discountValue ?? '0',
+      "totalPaid": totalPaid ?? '0',
     };
   }
 }
